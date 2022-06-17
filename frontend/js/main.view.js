@@ -1,5 +1,18 @@
-export const tareaHtml = (titulo, id) => {
-    return `<div class="titles  ">
+export const trHtml = (idListaTarea, nombreTarea) => {
+    return `<tr>
+                <td>${idListaTarea}</td>
+                <td>${nombreTarea}</td>
+                <td><input class="form-check-input" type="checkbox" id="completado"></td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm btnEditar">Editar</button>
+                    <button type="button" class="btnEliminarSubtarea btn btn-danger btn-sm" value="${idListaTarea}">Eliminar</button>
+                </td>
+            </tr>`;
+}
+
+
+export const tareaHtml = (titulo, id, listTask) => {
+    return `<div class="titles ">
     <div class="d-flex p-2 justify-content-end">
         <h3 class="me-sm-2">${titulo}</h3>
         <spam class = "spamId">${id}</spam>
@@ -27,23 +40,12 @@ export const tareaHtml = (titulo, id) => {
                 <th>Ediciones</th>
             </tr>
         </thead>
-        <tbody class="tbodyTh"></tbody>
+        <tbody class="tbodyTh">
+            ${listTask}
+        </tbody>
         </table>
     </div>
     <hr>`;
-}
-
-
-export const trHtml = (tarea) => {
-    return `<tr>
-                <td>${tarea.idListaTarea}</td>
-                <td>${tarea.nombreTarea}</td>
-                <td><input class="form-check-input" type="checkbox" id="completado"></td>
-                <td>
-                    <button type="button" class="btn btn-info btn-sm btnEditar">Editar</button>
-                    <button type="button" class="btn btn-danger btn-sm btnEliminarSubtarea">Eliminar</button>
-                </td>
-            </tr>`;
 }
 
 
