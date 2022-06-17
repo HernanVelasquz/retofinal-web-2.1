@@ -13,23 +13,23 @@ public class ControllerTareaLista {
     @Autowired
     private TareasListasServicio listaTareasServices;
 
-    @GetMapping(path = "app/listtareas")
+    @GetMapping(path = "app/listareas")
     public Iterable<TareaListasModel> list(){
         return listaTareasServices.list();
     }
 
-    @PostMapping(path = "app/listtareas")
+    @PostMapping(path = "app/listareas")
     public TareaListasModel crearSubTarea(@RequestBody TareaListasModel listTarea){
         return listaTareasServices.createListTask(listTarea);
-}
+    }
 
-    @PutMapping(path = "/app/listtarea/{id}")
+    @PutMapping(path = "app/listarea/{id}")
     public TareaListasModel actualizarSubTareas(@RequestBody TareaListasModel tareaLista, @PathVariable(value = "id") Long id){
         listaTareasServices.updateListTarea(id, tareaLista);
         return null;
     }
 
-    @DeleteMapping(path = "app/listtarea/{id}")
+    @DeleteMapping(path = "app/listarea/{id}")
     public void deleListTarea(@PathVariable("id") Long id){
         listaTareasServices.deleteListTarea(id);
     }

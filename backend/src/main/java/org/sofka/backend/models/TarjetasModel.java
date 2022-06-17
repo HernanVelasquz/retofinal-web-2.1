@@ -19,7 +19,7 @@ public class TarjetasModel {
     private Long id;
 
     @Column(nullable = false, length = 50)
-    private String tituloTarea;
+        private String tituloTarea;
 
     @OneToMany(fetch = FetchType.EAGER,
             targetEntity = TareaListasModel.class,
