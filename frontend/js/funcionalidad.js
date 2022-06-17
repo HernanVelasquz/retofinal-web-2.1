@@ -1,4 +1,4 @@
-import {tareaHtml,trHtml, on} from './main.view.js';
+import { tareaHtml,trHtml, on } from './main.view.js';
 const dom = document,
     $tarjetaContainer = dom.querySelector('.tajerContainer'),
     $btnGuardar = dom.querySelector('.btnGuardar'),
@@ -35,20 +35,58 @@ $btnGuardar.addEventListener('click', () => {
     }
 });
 
-
+/**
+ * Metodo encargado de mostrar la informacion de las tareas obtenidas en la base de datos
+ * @param {*} tarjetas recibe un arreglo con en formato json para renderizar los datos
+ */
 const mostrarInfo = (tarjetas) =>{
-    let tarjeta = '';
+    let tarjeta = '';   
     tarjetas.forEach(element => {
-       tarjeta += tareaHtml(element.tituloTarea);
+       tarjeta += tareaHtml(element.tituloTarea, element.id);
     });
     $tarjetaContainer.innerHTML = tarjeta;
 }
 
+/**
+ * Se llamada a la api de manera dinamica al cargar la pagina para traer la informacion 
+ * de la Api y consumirla en el fontEnd
+ */
 fetch(url+'/app/tarjata')
     .then(res => res.json())
     .then(tarjetJson => mostrarInfo(tarjetJson))
     .catch(error => alert(error.message));
 
+
+const eliminar = async (id) => {
+    fetch(url + `/app/tarjeta/${id}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    location.reload()
+}
+
+
+$tarjetaContainer.addEventListener("click", (e)=>{
+    if(e.target.classList[0] == "btnEliminarTarea"){
+        eliminar(e.target.previousElementSibling.textContent);
+    }   
+})
+
+
+
+// on(dom, 'click','.btnEliminarTarea', e =>{
+//     const eliminar = (id) => {
+//         fetch(url+`/app/tarjeta/${id}`,{
+//             method: 'DELETE'
+//         })
+//         .then(response => response.json())
+//         .then(() => location.reload())
+//     }
+    
+//     if(e.target.classList[0] == "Eliminar"){
+//         eliminar(e.target.previousElementSibling.textContent);
+//     }   
+// });
 // on(dom, 'click', '.btnInsertar', e => {
 //     e.preventDefault();
 //     let $tbodyTh = dom.querySelector('.tbodyTh');

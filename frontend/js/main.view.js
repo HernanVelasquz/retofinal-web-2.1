@@ -1,16 +1,17 @@
-export const tareaHtml = (titulo) => {
+export const tareaHtml = (titulo, id) => {
     return `<div class="titles ">
     <div class="d-flex p-2 justify-content-end">
-    <h3 class="me-sm-2">${titulo}</h3>
-    <button class="btn btn-secondary btn-sm" type="submit">Eliminar</button>
+        <h3 class="me-sm-2">${titulo}</h3>
+        <spam class = "spamId">${id}</spam>
+        <button class="btnEliminarTarea btn btn-secondary btn-sm" type="submit">Eliminar</button>
         <br>
-        </div>
-        <div class="container-fluid p-2">
-            <div class="row">
-                <div class="col-3">
-                    <form class="d-flex">
-                        <input class="form-control me-2 inserTarea" type="text" placeholder="Insertar tarea">
-                        <button class="btn btn-secondary my-2 my-sm-0 btnInsertar" type="submit">Insertar</button>
+    </div>
+    <div class="container-fluid p-2">
+        <div class="row">
+            <div class="col-3">
+                <form class="d-flex">
+                    <input class="form-control me-2 inserTarea" type="text" placeholder="Insertar tarea">
+                    <button class="btn btn-secondary my-2 my-sm-0 btnInsertar" type="submit">Insertar</button>
                     </form>
                 </div>
             </div>
