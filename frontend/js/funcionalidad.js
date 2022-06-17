@@ -1,4 +1,4 @@
-import { tareaHtml,trHtml, on} from './main.view.js';
+import { tareaHtml,trHtml,mostrarTabla} from './main.view.js';
 const dom = document,
     $tarjetaContainer = dom.querySelector('.tajerContainer'),
     $btnGuardar = dom.querySelector('.btnGuardar'),
@@ -69,6 +69,7 @@ const mostrarSubtareas = (data) =>{
     const $tbodyTh = dom.querySelector(".tbodyTh");
     let subTarea = '';
     data.forEach(elemt =>{
+        console.log(elemt);
         subTarea += trHtml(elemt)
     });
     $tbodyTh.innerHTML = subTarea;
@@ -98,9 +99,6 @@ const eliminar = async (id) => {
 
 
 const crearListTarea = ({name, id}) =>{
-
-    console.log(name, id);
-
     fetch(url+'/app/listareas',{
         method:'POST',
         headers:{
@@ -116,7 +114,6 @@ const crearListTarea = ({name, id}) =>{
     })
     // .then(res => obtenerSubTareas())
     obtenerSubTareas();
-    // location.reload();
 }
 
 
@@ -144,14 +141,3 @@ $tarjetaContainer.addEventListener("click", (e)=>{
 
 
  
-// $tarjetaContainer.addEventListener( "click", e =>{
-//     if(e.target.classList[0] == "btnInsertar"){
-//         e.preventDefault();
-//         let data = {
-//             name: e.target.previousElementSibling.value,
-//             id: e.path[0].value
-//         }
-
-//         crearListTarea(data)
-//     } 
-// });

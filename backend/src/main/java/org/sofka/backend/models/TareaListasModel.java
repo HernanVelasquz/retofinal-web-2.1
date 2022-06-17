@@ -11,17 +11,18 @@ import javax.persistence.*;
 public class TareaListasModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(unique = true,nullable = false)
     private Long idListaTarea;
 
-    @Column(nullable = false, length = 50)
+    @Column(unique = true,nullable = false, length = 50)
     private String nombreTarea;
 
     private boolean stado;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "Id_Tarjeta_listaTareas", nullable = false)
+    @JoinColumn(name = "listaid", nullable = false)
+
     @JsonBackReference
-    private TarjetasModel tarjetas;
+    private TarjetasModel listaid;
 
 }

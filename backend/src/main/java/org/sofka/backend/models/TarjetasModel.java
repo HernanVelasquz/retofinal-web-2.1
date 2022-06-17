@@ -15,17 +15,16 @@ import java.util.List;
 public class TarjetasModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, length = 50)
+    @Column(unique = true, nullable = false, length = 50)
     private Long id;
-
-    @Column(nullable = false, length = 50)
-        private String tituloTarea;
+    @Column(unique = true, nullable = false, length = 50)
+    private String tituloTarea;
 
     @OneToMany(fetch = FetchType.EAGER,
             targetEntity = TareaListasModel.class,
             cascade = CascadeType.REMOVE,
-            mappedBy = "tarjetas"
-    )
+            mappedBy = "listaid")
+
     @JsonBackReference
-    private List<TareaListasModel> listaTareas = new ArrayList<>();
+    private List<TareaListasModel>ListTask = new ArrayList<>();
 }

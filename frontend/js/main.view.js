@@ -33,7 +33,6 @@ export const tareaHtml = (titulo, id) => {
     <hr>`;
 }
 
-let idTarea = 0;
 
 export const trHtml = (tarea) => {
     return `<tr>
@@ -42,15 +41,14 @@ export const trHtml = (tarea) => {
                 <td><input class="form-check-input" type="checkbox" id="completado"></td>
                 <td>
                     <button type="button" class="btn btn-info btn-sm btnEditar">Editar</button>
-                    <button type="button" class="btn btn-danger btn-sm btnEliminar">Eliminar</button>
+                    <button type="button" class="btn btn-danger btn-sm btnEliminarSubtarea">Eliminar</button>
                 </td>
             </tr>`;
 }
 
-export const on = (element, event, selector, handler) => {
-    element.addEventListener(event, e => {
-        if(e.target.closest(selector)){
-            handler(e)
-        }
-    })
+
+
+export const mostrarTabla = (data) =>{
+    let resultado = '';
+    console.log(data);
 }
