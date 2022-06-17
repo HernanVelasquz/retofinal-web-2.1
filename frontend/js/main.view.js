@@ -1,9 +1,9 @@
 export const tareaHtml = (titulo, id) => {
-    return `<div class="titles ">
+    return `<div class="titles  ">
     <div class="d-flex p-2 justify-content-end">
         <h3 class="me-sm-2">${titulo}</h3>
         <spam class = "spamId">${id}</spam>
-        <button class="btnEliminarTarea btn btn-secondary btn-sm" type="submit">Eliminar</button>
+        <button class="btnEliminarTarea btn btn-secondary btn-sm" value="${id}" type="submit">Eliminar</button>
         <br>
     </div>
     <div class="container-fluid p-2">
@@ -11,7 +11,7 @@ export const tareaHtml = (titulo, id) => {
             <div class="col-3">
                 <form class="d-flex">
                     <input class="form-control me-2 inserTarea" type="text" placeholder="Insertar tarea">
-                    <button class="btn btn-secondary my-2 my-sm-0 btnInsertar" type="submit">Insertar</button>
+                    <button class="btnInsertar btn btn-secondary my-2 my-sm-0" value="${id}" type="submit">Insertar</button>
                     </form>
                 </div>
             </div>
@@ -37,8 +37,8 @@ let idTarea = 0;
 
 export const trHtml = (tarea) => {
     return `<tr>
-                <td>${idTarea+=1}</td>
-                <td>${tarea}</td>
+                <td>${tarea.idListaTarea}</td>
+                <td>${tarea.nombreTarea}</td>
                 <td><input class="form-check-input" type="checkbox" id="completado"></td>
                 <td>
                     <button type="button" class="btn btn-info btn-sm btnEditar">Editar</button>

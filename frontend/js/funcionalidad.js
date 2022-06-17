@@ -1,9 +1,22 @@
-import { tareaHtml,trHtml, on } from './main.view.js';
+import { tareaHtml,trHtml, on} from './main.view.js';
 const dom = document,
     $tarjetaContainer = dom.querySelector('.tajerContainer'),
     $btnGuardar = dom.querySelector('.btnGuardar'),
     $inputTarjeta = dom.querySelector('.inputTarjeta'),
     url = 'http://localhost:8080';
+
+
+
+/**
+ * Se llamada a la api de manera dinamica al cargar la pagina para traer la informacion 
+ * de la Api y consumirla en el fontEnd
+ */
+ fetch(url+'/app/tarjata')
+ .then(res => res.json())
+ .then(tarjetJson => mostrarInfo(tarjetJson))
+ .then(res => obtenerSubTareas())
+ .catch(error => alert(error.message));
+
 
 
 /**
@@ -48,58 +61,97 @@ const mostrarInfo = (tarjetas) =>{
 }
 
 /**
- * Se llamada a la api de manera dinamica al cargar la pagina para traer la informacion 
- * de la Api y consumirla en el fontEnd
+ * Funcion encargada de recibir el listado de las 
+ * subtareas y permitiendo mostrarlas en el html 
+ * @param {*} data lista de tareas parciadas.
  */
-fetch(url+'/app/tarjata')
-    .then(res => res.json())
-    .then(tarjetJson => mostrarInfo(tarjetJson))
-    .catch(error => alert(error.message));
+const mostrarSubtareas = (data) =>{
+    const $tbodyTh = dom.querySelector(".tbodyTh");
+    let subTarea = '';
+    data.forEach(elemt =>{
+        subTarea += trHtml(elemt)
+    });
+    $tbodyTh.innerHTML = subTarea;
+}
 
+/**
+ * Funcion encargada de relizar la peticion al endPont
+ * de las sub teareas para traer el listado de las subtareas
+ */
+const obtenerSubTareas = async () =>{
+   const peticionSubTareas = await fetch(url+'/app/listareas');
+   const parseoData = await peticionSubTareas.json();
+   mostrarSubtareas(parseoData);
+}
 
+/**
+ * Funcion encargada de realizar la eliminacion de la tarea en el listado
+ * @param {*} id de la tarea a la cual se encuentra referenciada
+ */
 const eliminar = async (id) => {
     fetch(url + `/app/tarjeta/${id}`, {
         method: 'DELETE'
     })
     .then(response => response.json())
-    location.reload()
+    location.reload();
 }
 
 
+const crearListTarea = ({name, id}) =>{
+
+    console.log(name, id);
+
+    fetch(url+'/app/listareas',{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+            "nombreTarea": name,
+            "stado":false,
+            "tarjetas": {
+                "id" : id
+            }
+        })
+    })
+    // .then(res => obtenerSubTareas())
+    obtenerSubTareas();
+    // location.reload();
+}
+
+
+/**
+ * Funcion encargada de detectar el evento emitido en el contenedor padre 
+ * para poder realizar la busqueda entre los elementos de y obtener el 
+ * boton que realizo el llamado a la funcionalidad para obtener el id y enviarlo 
+ * a la funcion de eliminar.
+ */
 $tarjetaContainer.addEventListener("click", (e)=>{
     if(e.target.classList[0] == "btnEliminarTarea"){
-        eliminar(e.target.previousElementSibling.textContent);
-    }   
+        eliminar(e.path[0].value);
+    }
+
+    if(e.target.classList[0] == "btnInsertar"){
+        e.preventDefault();
+        let data = {
+            name: e.target.previousElementSibling.value,
+            id: e.path[0].value
+        }
+
+        crearListTarea(data)
+    } 
 })
 
 
+ 
+// $tarjetaContainer.addEventListener( "click", e =>{
+//     if(e.target.classList[0] == "btnInsertar"){
+//         e.preventDefault();
+//         let data = {
+//             name: e.target.previousElementSibling.value,
+//             id: e.path[0].value
+//         }
 
-// on(dom, 'click','.btnEliminarTarea', e =>{
-//     const eliminar = (id) => {
-//         fetch(url+`/app/tarjeta/${id}`,{
-//             method: 'DELETE'
-//         })
-//         .then(response => response.json())
-//         .then(() => location.reload())
-//     }
-    
-//     if(e.target.classList[0] == "Eliminar"){
-//         eliminar(e.target.previousElementSibling.textContent);
-//     }   
-// });
-// on(dom, 'click', '.btnInsertar', e => {
-//     e.preventDefault();
-//     let $tbodyTh = dom.querySelector('.tbodyTh');
-//     const $inserTareaInput = dom.querySelector('.inserTarea').value;
-    
-//     $tbodyTh.innerHTML += trHtml($inserTareaInput);
-// });
-
-/**
- * Funcion encargada de borrar las sub tareas
- */
-// on(dom, 'click', '.btnEliminar', e =>{
-//     e.preventDefault();
-//     const fila = e.target.parentNode.parentNode;
-//     const id = fila.firstElementChild.innerHTML;
+//         crearListTarea(data)
+//     } 
 // });
