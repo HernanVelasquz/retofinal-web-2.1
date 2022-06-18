@@ -1,16 +1,45 @@
-export const trHtml = (idListaTarea, nombreTarea) => {
-    return `<tr>
+/**
+ * Funcion encargada de retornar la estructura
+ * del html y los datos que se requieran envar la subtarea con los 
+ * parametros recibidos
+ * @param {*} idListaTarea 
+ * @param {*} nombreTarea 
+ * @param {*} obj 
+ * @returns estructura html con los parametros enviados
+ */
+export const trHtml = (idListaTarea, nombreTarea, obj) => {
+    let check;
+    let clase; 
+    let dis;
+    if(obj.stado){
+        check = 'checked'
+        clase = 'danger'
+        dis = 'd-none'
+    }else{
+        check = 'unchecked'
+        clase = 'active'
+        dis = ''
+    }
+    return `<tr class ="table-${clase}">
                 <td>${idListaTarea}</td>
                 <td value="${nombreTarea}">${nombreTarea}</td>
-                <td><input class="form-check-input" type="checkbox" id="completado"></td>
+                <td><input class="form-check-input completado" ${check} type="checkbox"></td>
                 <td>
-                    <button type="button" class="btnEditar btn btn-info btn-sm">Editar</button>
+                    <button type="button" class="btnEditar btn btn-info btn-sm ${dis}">Editar</button>
                     <button type="button" class="btnEliminarSubtarea btn btn-danger btn-sm" value="${idListaTarea}">Eliminar</button>
                 </td>
             </tr>`;
 }
 
-
+/**
+ * Los parametos de los datos encargado de agrega la tarjeta de la tarea principal 
+ * generando los datos de manera dinamica permitiendo insertar los datos y tareas 
+ * que provienen de la base de datos 
+ * @param {*} titulo 
+ * @param {*} id 
+ * @param {*} listTask 
+ * @returns la estructura html con los datos insertados
+ */
 export const tareaHtml = (titulo, id, listTask) => {
     return `<div class="titles ">
     <div class="d-flex p-2 justify-content-end">
@@ -46,11 +75,4 @@ export const tareaHtml = (titulo, id, listTask) => {
         </table>
     </div>
     <hr>`;
-}
-
-
-
-export const mostrarTabla = (data) =>{
-    let resultado = '';
-    console.log(data);
 }

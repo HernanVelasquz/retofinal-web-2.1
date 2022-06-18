@@ -1,4 +1,4 @@
-import { tareaHtml, trHtml, mostrarTabla } from './main.view.js';
+import { tareaHtml, trHtml} from './main.view.js';
 const dom = document,
     $tarjetaContainer = dom.querySelector('.tajerContainer'),
     $btnGuardar = dom.querySelector('.btnGuardar'),
@@ -54,7 +54,7 @@ const mostrarInfo = async (tarjetas) => {
     await tarjetas.forEach(e => {
         tarea = '';
         e.listTask.forEach(taks => {
-            tarea += trHtml(taks.idListaTarea, taks.nombreTarea);
+            tarea += trHtml(taks.idListaTarea, taks.nombreTarea, taks);
         })
         tarjeta += tareaHtml(e.tituloTarea, e.id, tarea);
     });
@@ -109,8 +109,16 @@ const eliminarSubtarea = async (id) => {
     }).then(location.reload())
     .catch(console.log(err))
 }
-
-const actualizaSubTarea = async (id, name, padre) => {
+/**
+ * Funcion encargada de relizar la llamada a la API 
+ * Para enviar los datos, recibiendo los parametros requeridos para 
+ * hacer la actualizacion
+ * @param {number} id, de la subtarea
+ * @param {string} name, el texto a cambiar
+ * @param {number} id, el id del contenedor padre quien tiene la su tarea.
+ * @param {boolean} stado, encargado de realizar el envio del estado.
+ */
+const actualizaSubTarea = async (id, name, padre, stado = false) => {
     console.log(id, name);
     await fetch(url+`/app/listarea/`+id ,{
         method: 'PUT',
@@ -119,7 +127,7 @@ const actualizaSubTarea = async (id, name, padre) => {
         },
         body: JSON.stringify({
             "nombreTarea": name,
-            "stado": false,
+            "stado": stado,
             "listaid": {
                 "id": padre
             }
@@ -128,7 +136,14 @@ const actualizaSubTarea = async (id, name, padre) => {
     .then(location.reload())
     .catch(console.log(err))
 }
-
+/**
+ * Funcion encargada de relizar el cambio en el aspecto visual del 
+ * html y permitiendo generar las mejoras en el apartado visual 
+ * @param {number} contend
+ * @param {number} idButton
+ * @param {input} inputReferent
+ * @param {button} buttonReferent 
+ */
 const actualizarHtml = ({contend, idButton,inputReferent, buttonReferent}) =>{
     inputReferent.value = contend;
     buttonReferent.value = idButton;
@@ -179,10 +194,25 @@ $tarjetaContainer.addEventListener("click", (e) => {
         }
         actualizarHtml(editData);
     }
-
+    /**
+     * Metodo encargado de realizar la actualizacion de los datos
+     * y envia los datos que se necesitan
+     */
     if(e.target.textContent == "Actualizar"){
         e.preventDefault();
-        console.log( );
         actualizaSubTarea(e.path[0].value, e.target.previousElementSibling.value, e.path[5].children[0].children[1].textContent);   
+    }
+    /**
+     * Metodo encargado de aplicar el cambio de la estructura del DOM 
+     * y validarlo en la base de datos.
+     */
+    if(e.target.classList[0] == "form-check-input"){
+        const obj = {
+            id: e.path[2].children[0].textContent,
+            nombre:e.path[2].children[1].textContent,
+            idPadre: e.path[6].children[0].children[0].children[1].textContent,
+            estado: e.target.checked
+        }
+        actualizaSubTarea(obj.id, obj.nombre, obj.idPadre ,obj.estado);
     }
 });
