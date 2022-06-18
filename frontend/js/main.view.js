@@ -1,10 +1,10 @@
 export const trHtml = (idListaTarea, nombreTarea) => {
     return `<tr>
                 <td>${idListaTarea}</td>
-                <td>${nombreTarea}</td>
+                <td value="${nombreTarea}">${nombreTarea}</td>
                 <td><input class="form-check-input" type="checkbox" id="completado"></td>
                 <td>
-                    <button type="button" class="btn btn-info btn-sm btnEditar">Editar</button>
+                    <button type="button" class="btnEditar btn btn-info btn-sm">Editar</button>
                     <button type="button" class="btnEliminarSubtarea btn btn-danger btn-sm" value="${idListaTarea}">Eliminar</button>
                 </td>
             </tr>`;

@@ -6,7 +6,6 @@ const dom = document,
     url = 'http://localhost:8080';
 
 
-
 /**
  * Se llamada a la api de manera dinamica al cargar la pagina para traer la informacion 
  * de la Api y consumirla en el fontEnd
@@ -15,8 +14,6 @@ fetch(url + '/app/tarjata')
     .then(res => res.json())
     .then(tarjetJson => mostrarInfo(tarjetJson))
     .catch(error => alert(error.message));
-
-
 
 /**
  * Funcion encargada de conectarse a la Api y crear una nueva tarea
@@ -74,7 +71,7 @@ const eliminar = async (id) => {
     await fetch(url + `/app/tarjeta/${id}`, {
         method: 'DELETE'
     })
-    .then(response => location.reload())
+    .then(location.reload())
     .catch(error => console.log(error))
 }
 
@@ -98,7 +95,7 @@ const crearListTarea = async ({ name, id }) => {
             }
         })
     })
-    .then(res => location.reload())
+    .then(location.reload())
 }
 
 /**
@@ -113,27 +110,79 @@ const eliminarSubtarea = async (id) => {
     .catch(console.log(err))
 }
 
+const actualizaSubTarea = async (id, name, padre) => {
+    console.log(id, name);
+    await fetch(url+`/app/listarea/`+id ,{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            "nombreTarea": name,
+            "stado": false,
+            "listaid": {
+                "id": padre
+            }
+        })
+    })
+    .then(location.reload())
+    .catch(console.log(err))
+}
+
+const actualizarHtml = ({contend, idButton,inputReferent, buttonReferent}) =>{
+    inputReferent.value = contend;
+    buttonReferent.value = idButton;
+    buttonReferent.textContent = 'Actualizar';
+}
+
 /**
  * Funcion encargada de detectar los eventos emitidos por los diferentes 
  * etiquetas dinmaicas, realizar su escucha y captura de informacion
  * permtiendo realizar las distintas opraciones corespondientes.
  */
 $tarjetaContainer.addEventListener("click", (e) => {
+    /**
+     * Validacion encargada de realizar la eliminacion de las tareas
+     */
     if (e.target.classList[0] == "btnEliminarTarea") {
         eliminar(e.path[0].value);
     }
-
-    if (e.target.classList[0] == "btnInsertar") {
+    /**
+     * Validacion encargada de detectar si se va ha insertar una sub tarea
+     */
+    if (e.target.textContent == "Insertar") {
         e.preventDefault();
         let data = {
             name: e.target.previousElementSibling.value,
             id: e.path[0].value
         }
-
         crearListTarea(data)
     }
-
+    /**
+     * Validacion encargada si se quiere realizar la eliminacion de la subTarea
+     */
     if (e.target.classList[0] == "btnEliminarSubtarea"){
         eliminarSubtarea(e.path[0].value);
+    }
+
+    /**
+     * Validacion encargada si se quiere actualizar una subtarea
+     * realizar la busqueda de los distintos nodos y se les pasa a una funcion que 
+     * actualiza el contenido del html
+     */
+    if (e.target.classList[0] == "btnEditar"){
+        let editData = {
+            contend: e.path[2].children[1].textContent,
+            idButton:e.path[2].children[0].textContent,
+            inputReferent: e.path[6].children[0].children[1].children[0].children[0].children[0].children[0],
+            buttonReferent: e.path[6].children[0].children[1].children[0].children[0].children[0].children[1]
+        }
+        actualizarHtml(editData);
+    }
+
+    if(e.target.textContent == "Actualizar"){
+        e.preventDefault();
+        console.log( );
+        actualizaSubTarea(e.path[0].value, e.target.previousElementSibling.value, e.path[5].children[0].children[1].textContent);   
     }
 });
